@@ -29,20 +29,9 @@ pipeline {
       }
       steps {
         sh '''
-              echo "=== Node & NPM Version ==="
-      node --version
-      npm --version
-
-      echo "=== Set local cache folder ==="
-      mkdir -p .npm
-      npm config set cache $(pwd)/.npm
-
-      echo "=== Initialize & Install Package ==="
-      npm init -y
-      npm install lodash
-
-      echo "=== Test Installed Package ==="
-      node -e "console.log('Lodash version:', require('lodash').VERSION)"
+             node --version
+             
+             
         '''
       }
     }
