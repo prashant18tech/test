@@ -7,6 +7,57 @@ pipeline {
       }
       steps {
         script {
+          // Run Java program and capture clean output
+          def output = sh(
+            script: '''
+              # Create HelloWorld.java
+              cat > HelloWorld.java <<EOF
+              public class HelloWorld {
+                  public static void main(String[] args) {
+                      System.out.println("Hello, Jenkins from Java!");
+                  }
+              }
+              EOF
+
+              # Compile and run
+              javac HelloWorld.java
+              java HelloWorld
+            ''',
+            returnStdout: true
+          ).trim()
+
+          // Print only program output
+          echo "Java Program Output: ${output}"
+        }
+      }
+    }
+
+    stage('Front-end') {
+      agent {
+        docker { image 'node:16-alpine' }
+      }
+      steps {
+        script {
+          def nodeVersion = sh(
+            script: "node --version",
+            returnStdout: true
+          ).trim()
+
+          echo "Node.js Version: ${nodeVersion}"
+        }
+      }
+    }
+  }
+}
+pipeline {
+  agent none
+  stages {
+    stage('Back-end') {
+      agent {
+        docker { image 'maven:3.8.1-adoptopenjdk-11' }
+      }
+      steps {
+        script {
           // Create HelloWorld.java
           sh '''
             cat > HelloWorld.java <<EOF
