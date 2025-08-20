@@ -6,15 +6,38 @@ pipeline {
         docker { image 'maven:3.8.1-adoptopenjdk-11' }
       }
       steps {
-        sh 'mvn --version'
+        sh '''
+          # Create HelloWorld.java
+          cat > HelloWorld.java <<EOF
+          public class HelloWorld {
+              public static void main(String[] args) {
+                  System.out.println("Hello, Jenkins from Java!");
+              }
+          }
+          EOF
+
+          # Compile and run
+          javac HelloWorld.java
+          java HelloWorld
+        '''
       }
     }
+
     stage('Front-end') {
       agent {
         docker { image 'node:16-alpine' }
       }
       steps {
-        sh 'node --version'
+        sh '''
+          # Initialize a new Node.js project
+          npm init -y
+
+          # Install an npm package (e.g., lodash)
+          npm install lodash
+
+          # Verify installation
+          node -e "console.log('Hello, Jenkins from Node.js!'); console.log('Lodash version:', require('lodash').VERSION)"
+        '''
       }
     }
   }
