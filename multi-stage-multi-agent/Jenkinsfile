@@ -29,16 +29,20 @@ pipeline {
       }
       steps {
         sh '''
-          # Initialize a new Node.js project
-          node --version
-          npm config set cache .npm --global
-          npm init -y
+              echo "=== Node & NPM Version ==="
+      node --version
+      npm --version
 
-          # Install an npm package (e.g., lodash)
-          npm install lodash
+      echo "=== Set local cache folder ==="
+      mkdir -p .npm
+      npm config set cache $(pwd)/.npm
 
-          # Verify installation
-          node -e "console.log('Hello, Jenkins from Node.js!'); console.log('Lodash version:', require('lodash').VERSION)"
+      echo "=== Initialize & Install Package ==="
+      npm init -y
+      npm install lodash
+
+      echo "=== Test Installed Package ==="
+      node -e "console.log('Lodash version:', require('lodash').VERSION)"
         '''
       }
     }
