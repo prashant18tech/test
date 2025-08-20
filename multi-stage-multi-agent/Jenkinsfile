@@ -30,6 +30,8 @@ pipeline {
       steps {
         sh '''
           # Initialize a new Node.js project
+          node --version
+          npm config set cache .npm --global
           npm init -y
 
           # Install an npm package (e.g., lodash)
